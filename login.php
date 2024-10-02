@@ -1,4 +1,4 @@
-
+<?php include ('header.php'); ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,6 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Login</title>
     <link rel="stylesheet" href="dashboard/assets/css/style.css">
+    <style>  .footer-padding {
+            padding-top: 40px; /* Adjust padding as needed */
+        }</style>
 </head>
 <body>
     <div class="login-container">
@@ -21,12 +24,17 @@
         </form>
         <p>Have no account? <a href="signup.php">Signup</a></p>
     </div>
+    <footer class="footer">
+        <div class="footer-container container">
+            <p class="footer-text">© 2023 Plantex. All rights reserved.</p>
+        </div>
+    </footer>
 </body>
 </html>
 
 <?php
 include_once('dashboard/db.php');
-session_start();
+// session_start();
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $username = $_POST['username'];
@@ -68,4 +76,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         echo "<p>Invalid credentials</p>";
     }
 }
+
 ?>
+

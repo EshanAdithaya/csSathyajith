@@ -1,5 +1,5 @@
 <?php
-include('userSession.php');
+include_once('userSession.php');
 include_once('dashboard/db.php');
 
 // Fetch products from the database
