@@ -203,7 +203,7 @@
                         </button>
                     </article>
                 </div>
-                <button class="button button--flex" onclick="window.location.href='productShow.html'">
+                <button class="button button--flex" onclick="window.location.href='productShow.php'">
                     Browse the Products
                     <i class="ri-arrow-right-up-line button__icon"></i>
                 </button>
