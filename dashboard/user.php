@@ -10,6 +10,15 @@ function getAllUsers() {
     $result = $conn->query($sql);
     return $result->fetch_all(MYSQLI_ASSOC);
 }
+
+// Function to get deleted users
+function getDeletedUsers() {
+    global $conn;
+    $sql = "SELECT * FROM users WHERE is_deleted = 1";
+    $result = $conn->query($sql);
+    return $result->fetch_all(MYSQLI_ASSOC);
+}
+
 // Soft delete user
 if (isset($_POST['delete_user'])) {
     $user_id = $_POST['user_id'];
@@ -48,8 +57,7 @@ if (isset($_POST['update_user'])) {
     $stmt->close();
 }
 
-
-// Optional: Restore user function
+// Restore user function
 if (isset($_POST['restore_user'])) {
     $user_id = $_POST['user_id'];
     
@@ -67,6 +75,7 @@ if (isset($_POST['restore_user'])) {
 }
 
 $users = getAllUsers();
+$deleted_users = getDeletedUsers();
 ?>
 
 <div class="dashboard-container">
@@ -82,6 +91,7 @@ $users = getAllUsers();
                 <div class="error-message"><?php echo htmlspecialchars($error_message); ?></div>
             <?php endif; ?>
             
+            <h2>Active Users</h2>
             <div class="user-table">
                 <table>
                     <tr>
@@ -108,6 +118,37 @@ $users = getAllUsers();
                     <?php endforeach; ?>
                 </table>
             </div>
+
+            <?php if (!empty($deleted_users)): ?>
+                <h2>Deactivated Users</h2>
+                <div class="user-table">
+                    <table>
+                        <tr>
+                            <th>ID</th>
+                            <th>Username</th>
+                            <th>Email</th>
+                            <th>Role</th>
+                            <th>Deactivated At</th>
+                            <th>Action</th>
+                        </tr>
+                        <?php foreach ($deleted_users as $user): ?>
+                        <tr>
+                            <td><?php echo $user['id']; ?></td>
+                            <td><?php echo htmlspecialchars($user['username']); ?></td>
+                            <td><?php echo htmlspecialchars($user['email']); ?></td>
+                            <td><?php echo htmlspecialchars($user['role']); ?></td>
+                            <td><?php echo $user['deleted_at']; ?></td>
+                            <td>
+                                <form method="post" style="display: inline;">
+                                    <input type="hidden" name="user_id" value="<?php echo $user['id']; ?>">
+                                    <button type="submit" name="restore_user">Restore</button>
+                                </form>
+                            </td>
+                        </tr>
+                        <?php endforeach; ?>
+                    </table>
+                </div>
+            <?php endif; ?>
         </div>
     </main>
 </div>
