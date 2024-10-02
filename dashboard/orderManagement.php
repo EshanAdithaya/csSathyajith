@@ -56,52 +56,55 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_status'])) {
 
 $orders = getAllOrders();
 ?>
+<div class="dashboard-container">
+    <?php include('includes/sidebar.php'); ?>
+    <div class="container">
 
-<div class="container">
-    <h1>Order Management</h1>
-    <table class="order-table">
-        <thead>
-            <tr>
-                <th>Order ID</th>
-                <th>User</th>
-                <th>Total Amount</th>
-                <th>Status</th>
-                <th>Date</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php foreach ($orders as $order): ?>
+        <h1>Order Management</h1>
+        <table class="order-table">
+            <thead>
                 <tr>
-                    <td><?php echo $order['id']; ?></td>
-                    <td><?php echo htmlspecialchars($order['username']); ?></td>
-                    <td>$<?php echo number_format($order['total_amount'], 2); ?></td>
-                    <td><?php echo ucfirst($order['status']); ?></td>
-                    <td><?php echo $order['created_at']; ?></td>
-                    <td>
-                        <button onclick="showOrderDetails(<?php echo $order['id']; ?>)">View Details</button>
-                        <form method="post" style="display: inline;">
-                            <input type="hidden" name="order_id" value="<?php echo $order['id']; ?>">
-                            <select name="new_status">
-                                <option value="pending" <?php echo $order['status'] == 'pending' ? 'selected' : ''; ?>>Pending</option>
-                                <option value="processing" <?php echo $order['status'] == 'processing' ? 'selected' : ''; ?>>Processing</option>
-                                <option value="shipped" <?php echo $order['status'] == 'shipped' ? 'selected' : ''; ?>>Shipped</option>
-                                <option value="delivered" <?php echo $order['status'] == 'delivered' ? 'selected' : ''; ?>>Delivered</option>
-                            </select>
-                            <button type="submit" name="update_status">Update Status</button>
-                        </form>
-                    </td>
+                    <th>Order ID</th>
+                    <th>User</th>
+                    <th>Total Amount</th>
+                    <th>Status</th>
+                    <th>Date</th>
+                    <th>Actions</th>
                 </tr>
-            <?php endforeach; ?>
-        </tbody>
-    </table>
-</div>
+            </thead>
+            <tbody>
+                <?php foreach ($orders as $order): ?>
+                    <tr>
+                        <td><?php echo $order['id']; ?></td>
+                        <td><?php echo htmlspecialchars($order['username']); ?></td>
+                        <td>$<?php echo number_format($order['total_amount'], 2); ?></td>
+                        <td><?php echo ucfirst($order['status']); ?></td>
+                        <td><?php echo $order['created_at']; ?></td>
+                        <td>
+                            <button onclick="showOrderDetails(<?php echo $order['id']; ?>)">View Details</button>
+                            <form method="post" style="display: inline;">
+                                <input type="hidden" name="order_id" value="<?php echo $order['id']; ?>">
+                                <select name="new_status">
+                                    <option value="pending" <?php echo $order['status'] == 'pending' ? 'selected' : ''; ?>>Pending</option>
+                                    <option value="processing" <?php echo $order['status'] == 'processing' ? 'selected' : ''; ?>>Processing</option>
+                                    <option value="shipped" <?php echo $order['status'] == 'shipped' ? 'selected' : ''; ?>>Shipped</option>
+                                    <option value="delivered" <?php echo $order['status'] == 'delivered' ? 'selected' : ''; ?>>Delivered</option>
+                                </select>
+                                <button type="submit" name="update_status">Update Status</button>
+                            </form>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+    </div>
 
-<div id="orderDetailsModal" class="modal">
-    <div class="modal-content">
-        <span class="close">&times;</span>
-        <h2>Order Details</h2>
-        <div id="orderDetailsContent"></div>
+    <div id="orderDetailsModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Order Details</h2>
+            <div id="orderDetailsContent"></div>
+        </div>
     </div>
 </div>
 
