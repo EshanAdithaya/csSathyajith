@@ -1,4 +1,4 @@
-<?php include ('header.php'); ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -65,7 +65,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 // Redirect non-admin users to a different page
                 echo "<script type='text/javascript'>
                         alert('welcome user');
-                        window.location.href = '../index.html';
+                        window.location.href = 'index.php';
                       </script>";
                 exit();
             }
