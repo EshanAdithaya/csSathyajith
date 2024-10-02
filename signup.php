@@ -1,5 +1,5 @@
 <?php
-include_once('dashboard/db.php');
+ include ('header.php');
 
 
 // signup.php
@@ -27,6 +27,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Signup</title>
     <link rel="stylesheet" href="dashboard/assets/css/style.css">
+    <style>  .footer-padding {
+        padding-top: 40px; /* Adjust padding as needed */
+    }</style>
 </head>
 <body>
     <div class="login-container">
@@ -48,5 +51,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         </form>
         <p>Already have an account? <a href="login.php">Login</a></p>
     </div>
+    <footer class="footer">
+        <div class="footer-container container">
+            <p class="footer-text">© 2023 Plantex. All rights reserved.</p>
+        </div>
+    </footer>
 </body>
 </html>
