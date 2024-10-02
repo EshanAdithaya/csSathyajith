@@ -71,7 +71,7 @@
                             </p>
                         </div>
 
-                        <a href="#" class="button--link button--flex">
+                        <a href="productShow.php" class="button--link button--flex">
                             Shop Now <i class="ri-arrow-right-down-line button__icon"></i>
                         </a>
                     </div>

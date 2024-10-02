@@ -3,21 +3,28 @@ include('includes/header.php');
 include('session.php');
 include_once('db.php');
 
-// Function to get all users
+// Function to get all active users
 function getAllUsers() {
     global $conn;
-    $sql = "SELECT * FROM users";
+    $sql = "SELECT * FROM users WHERE is_deleted = 0";
     $result = $conn->query($sql);
     return $result->fetch_all(MYSQLI_ASSOC);
 }
-
-// Delete user
+// Soft delete user
 if (isset($_POST['delete_user'])) {
     $user_id = $_POST['user_id'];
-    $sql = "DELETE FROM users WHERE id = ?";
+    $current_timestamp = date('Y-m-d H:i:s');
+    
+    $sql = "UPDATE users SET is_deleted = 1, deleted_at = ? WHERE id = ?";
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param("i", $user_id);
-    $stmt->execute();
+    $stmt->bind_param("si", $current_timestamp, $user_id);
+    
+    try {
+        $stmt->execute();
+        $success_message = "User successfully deactivated.";
+    } catch (Exception $e) {
+        $error_message = "Error deactivating user: " . $e->getMessage();
+    }
     $stmt->close();
 }
 
@@ -28,10 +35,34 @@ if (isset($_POST['update_user'])) {
     $email = $_POST['email'];
     $role = $_POST['role'];
 
-    $sql = "UPDATE users SET username = ?, email = ?, role = ? WHERE id = ?";
+    $sql = "UPDATE users SET username = ?, email = ?, role = ? WHERE id = ? AND is_deleted = 0";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("sssi", $username, $email, $role, $user_id);
-    $stmt->execute();
+    
+    try {
+        $stmt->execute();
+        $success_message = "User successfully updated.";
+    } catch (Exception $e) {
+        $error_message = "Error updating user: " . $e->getMessage();
+    }
+    $stmt->close();
+}
+
+
+// Optional: Restore user function
+if (isset($_POST['restore_user'])) {
+    $user_id = $_POST['user_id'];
+    
+    $sql = "UPDATE users SET is_deleted = 0, deleted_at = NULL WHERE id = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("i", $user_id);
+    
+    try {
+        $stmt->execute();
+        $success_message = "User successfully restored.";
+    } catch (Exception $e) {
+        $error_message = "Error restoring user: " . $e->getMessage();
+    }
     $stmt->close();
 }
 
@@ -43,6 +74,14 @@ $users = getAllUsers();
     <main>
         <div class="dashboard-content">
             <h1>User Management</h1>
+            
+            <?php if (isset($success_message)): ?>
+                <div class="success-message"><?php echo htmlspecialchars($success_message); ?></div>
+            <?php endif; ?>
+            <?php if (isset($error_message)): ?>
+                <div class="error-message"><?php echo htmlspecialchars($error_message); ?></div>
+            <?php endif; ?>
+            
             <div class="user-table">
                 <table>
                     <tr>
@@ -55,14 +94,14 @@ $users = getAllUsers();
                     <?php foreach ($users as $user): ?>
                     <tr>
                         <td><?php echo $user['id']; ?></td>
-                        <td><?php echo $user['username']; ?></td>
-                        <td><?php echo $user['email']; ?></td>
-                        <td><?php echo $user['role']; ?></td>
+                        <td><?php echo htmlspecialchars($user['username']); ?></td>
+                        <td><?php echo htmlspecialchars($user['email']); ?></td>
+                        <td><?php echo htmlspecialchars($user['role']); ?></td>
                         <td>
-                            <button onclick="openUpdateModal(<?php echo $user['id']; ?>, '<?php echo $user['username']; ?>', '<?php echo $user['email']; ?>', '<?php echo $user['role']; ?>')">Update</button>
+                            <button onclick="openUpdateModal(<?php echo $user['id']; ?>, '<?php echo htmlspecialchars($user['username']); ?>', '<?php echo htmlspecialchars($user['email']); ?>', '<?php echo htmlspecialchars($user['role']); ?>')">Update</button>
                             <form method="post" style="display: inline;">
                                 <input type="hidden" name="user_id" value="<?php echo $user['id']; ?>">
-                                <button type="submit" name="delete_user" onclick="return confirm('Are you sure you want to delete this user?')">Delete</button>
+                                <button type="submit" name="delete_user" onclick="return confirm('Are you sure you want to deactivate this user?')">Deactivate</button>
                             </form>
                         </td>
                     </tr>

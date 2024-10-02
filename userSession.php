@@ -7,7 +7,7 @@ if (!isset($_SESSION['user_id'])) {
     // header('Location: login.php');
     echo "<script type='text/javascript'>
     alert('please login inorder to place order');
-    window.location.href = 'dashboard/login.php';
+    window.location.href = 'login.php';
   </script>";
     exit();
 }

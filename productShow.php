@@ -1,5 +1,5 @@
 <?php include('header.php') 
-include_once('userSession.php');?>
+?>
     <main class="main">
         <section class="product section container" id="products">
             <h2 class="section__title-center">
