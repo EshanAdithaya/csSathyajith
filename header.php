@@ -149,6 +149,10 @@ if (isset($_SESSION['user_id'])) {
                         <div class="dropdown-content">
                             <a href="orders.php">Order History</a>
                             <a href="account.php">My Account</a>
+                           
+                            <?php if ($_SESSION['role'] === 'admin'): ?>
+                                <a href="dashboard/dashboard.php">Go to Admin Dashboard</a>
+                            <?php endif; ?>
                             <a href="dashboard/logout.php" class="logout-btn">Logout</a>
                         </div>
                     </div>
